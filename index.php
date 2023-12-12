@@ -37,7 +37,7 @@
 			$UserName = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 
 			$totalPrice = $price * $quantity;
-
+			
 			if (!$UserName) {
 				// redirect to login page
 				header("Location: login.php");

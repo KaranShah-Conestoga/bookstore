@@ -23,65 +23,89 @@
 
 		$sql = "USE bookstore";
 		$conn->query($sql);
+		// users.UserName = '" . $_SESSION['id'] . "'";
+		// $sql = "SELECT UserName from customer WHERE UserName = '" . $_SESSION['id'] . "'";
+		// $result = $conn->query($sql);
+		// while ($row = $result->fetch_assoc()) {
+		// 	$cID = $row['UserName'];
+		// }
 
-		$sql = "SELECT UserName from customer WHERE UserName = '" . $_SESSION['id'] . "'";
-		$result = $conn->query($sql);
-		while ($row = $result->fetch_assoc()) {
-			$cID = $row['UserName'];
-		}
-
-		$sql = "UPDATE cart SET UserName = " . $cID . " WHERE 1";
+		$sql = "UPDATE cart SET UserName = '" . $_SESSION['id'] . "' WHERE 1";
 		$conn->query($sql);
+
+		$total = 0;
 
 		$sql = "SELECT * FROM cart";
 		$result = $conn->query($sql);
 		while ($row = $result->fetch_assoc()) {
+			$total += $row['TotalPrice'];
 			$sql = "INSERT INTO `order`(UserName, ISBN, DatePurchase, Quantity, TotalPrice, Status) 
-		VALUES(" . $row['UserName'] . ", '" . $row['ISBN']
-				. "', CURRENT_TIME, " . $row['Quantity'] . ", " . $row['TotalPrice'] . ", 'N')";
+					VALUES('" . $_SESSION['id'] . "', '" . $row['ISBN'] . "', CURRENT_TIME, " . $row['Quantity'] . ", " . $row['TotalPrice'] . ", 'N')";
 			$conn->query($sql);
 		}
+
 		$sql = "DELETE FROM cart";
 		$conn->query($sql);
-
 		$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
-FROM customer, book, `order`
-WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND `order`.`Status` = 'N' AND `order`.`UserName` = " . $cID . "";
+		FROM customer, book, `order`
+		WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND `order`.`Status` = 'N' AND `order`.UserName = '" . $_SESSION['id'] . "'";
 		$result = $conn->query($sql);
 
 		echo '<div class="container">';
 		echo '<blockquote>';
-	?>
-		<input class="button" style="float: right;" type="button" name="cancel" value="Continue Shopping" onClick="window.location='index.php';" />
-	<?php
-		echo '<h2 style="color: #000;">Order Successful</h2>';
-		echo "<table style='width:100%'>";
-		echo "<tr><th>Order Summary</th>";
-		echo "<th></th></tr>";
-		$row = $result->fetch_assoc();
-		echo "<tr><td>Name: </td><td>" . $row['CustomerName'] . "</td></tr>";
-		echo "<tr><td>No.Number: </td><td>" . $row['CustomerIC'] . "</td></tr>";
-		echo "<tr><td>E-mail: </td><td>" . $row['CustomerEmail'] . "</td></tr>";
-		echo "<tr><td>Mobile Number: </td><td>" . $row['CustomerPhone'] . "</td></tr>";
-		echo "<tr><td>Gender: </td><td>" . $row['CustomerGender'] . "</td></tr>";
-		echo "<tr><td>Address: </td><td>" . $row['CustomerAddress'] . "</td></tr>";
-		echo "<tr><td>Date: </td><td>" . $row['DatePurchase'] . "</td></tr>";
+
+		if ($result && $result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+			echo '<input class="button" style="float: right;" type="button" name="cancel" value="Continue Shopping" onClick="window.location=\'index.php\';" />';
+			echo '<h2 style="color: #000;">Order Successful</h2>';
+			echo "<table style='width:100%'>";
+			echo "<tr><th>Order Summary</th>";
+			echo "<th></th></tr>";
+			echo "<tr><td>Name: </td><td>" . $row['CustomerName'] . "</td></tr>";
+			echo "<tr><td>No.Number: </td><td>" . $row['CustomerIC'] . "</td></tr>";
+			echo "<tr><td>E-mail: </td><td>" . $row['CustomerEmail'] . "</td></tr>";
+			echo "<tr><td>Mobile Number: </td><td>" . $row['CustomerPhone'] . "</td></tr>";
+			echo "<tr><td>Gender: </td><td>" . $row['CustomerGender'] . "</td></tr>";
+			echo "<tr><td>Address: </td><td>" . $row['CustomerAddress'] . "</td></tr>";
+			echo "<tr><td>Date: </td><td>" . $row['DatePurchase'] . "</td></tr>";
+			echo "</table>";
+		} else {
+			echo '<p>No results found</p>';
+		}
+
 		echo "</blockquote>";
+		echo "</div>";
+		$cID = ""; // Initialize $cID outside the block
+
+		if (isset($_POST['submitButton'])) {
+			// Your existing code to validate and insert data into the database
+
+			// Update the value of $cID
+			$sql = "SELECT UserName from customer WHERE CustomerName = '" . $name . "' AND CustomerIC = '" . $ic . "'";
+			$result = $conn->query($sql);
+			while ($row = $result->fetch_assoc()) {
+				$cID = $row['UserName'];
+			}
+
+			// Rest of your existing code
+		}
+
+
+
+		// Now $cID is defined and can be safely used outside the block
+
+		// Example usage in the subsequent SQL query
+
 
 		$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
-		FROM customer, book, `order`
-		WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND `order`.`Status` = 'N' AND `order`.`UserName` = " . $cID . "";
+				FROM customer, book, `order`
+				WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND `order`.`Status` = 'N' AND `order`.`UserName` = " . $cID . "";
 		$result = $conn->query($sql);
-		$total = 0;
-		while ($row = $result->fetch_assoc()) {
-			echo "<tr><td style='border-top: 2px solid #ccc;'>";
-			echo '<img src="' . $row["Image"] . '"width="20%"></td><td style="border-top: 2px solid #ccc;">';
-			echo $row['BookTitle'] . "<br>RM" . $row['Price'] . "<br>";
-			echo "Quantity: " . $row['Quantity'] . "<br>";
-			echo "</td></tr>";
-			$total += $row['TotalPrice'];
-		}
-		echo "<tr><td style='background-color: #ccc;'></td><td style='text-align: right;background-color: #ccc;''>Total Price: <b>RM" . $total . "</b></td></tr>";
+
+		// ... rest of your code ...
+
+		echo "<tr><td style='background-color: #ccc;'></td><td style='text-align: right;background-color: #ccc;''>Total Price: <b>$ " . $total . "</b></td></tr>";
+
 		echo "</table>";
 		echo "</div>";
 
@@ -92,6 +116,7 @@ WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND 
 	$nameErr = $emailErr = $genderErr = $addressErr = $icErr = $contactErr = "";
 	$name = $email = $gender = $address = $ic = $contact = "";
 	$cID;
+
 
 	if (isset($_POST['submitButton'])) {
 		if (empty($_POST["name"])) {
@@ -160,7 +185,8 @@ WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND 
 													$cID = $row['UserName'];
 												}
 
-												$sql = "UPDATE cart SET UserName = " . $cID . " WHERE 1";
+												$sql = "UPDATE cart SET UserName = '" .  $_SESSION['id'] . "' WHERE 1";
+
 												$conn->query($sql);
 
 												$sql = "SELECT * FROM cart";
@@ -184,6 +210,29 @@ WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND 
 			}
 		}
 	}
+	// Assuming $_SESSION['id'] contains the current user's ID
+	if (isset($_SESSION['id'])) {
+		// ... your existing code
+
+		// Retrieve the latest order data for the current user
+		$latestOrderQuery = "SELECT * FROM `order` WHERE UserName = '" . $_SESSION['id'] . "' ORDER BY DatePurchase DESC LIMIT 1";
+		$latestOrderResult = $conn->query($latestOrderQuery);
+
+		if ($latestOrderResult && $latestOrderResult->num_rows > 0) {
+			$latestOrder = $latestOrderResult->fetch_assoc();
+
+			// Display the latest order data
+			echo "<h2>Latest Order Details</h2>";
+			echo "<p>Order ID: " . $latestOrder['OrderID'] . "</p>";
+			echo "<p>Order Date: " . $latestOrder['DatePurchase'] . "</p>";
+			// ... display other order details as needed
+		} else {
+			echo "<p>No recent orders found.</p>";
+		}
+
+		// ... rest of your code
+	}
+
 	function test_input($data)
 	{
 		$data = trim($data);
@@ -376,6 +425,7 @@ WHERE `order`.`UserName` = customer.UserName AND `order`.`ISBN` = book.ISBN AND 
 		}
 		?>
 	</blockquote>
+
 </body>
 
 </html>
