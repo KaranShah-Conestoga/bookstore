@@ -16,10 +16,17 @@ try {
         $stmt->execute();
     }
 
-    $stmt = $conn->prepare("SELECT * FROM Book");
-    $stmt->execute();
+    // Fetch Book data
+    $stmtBook = $conn->prepare("SELECT * FROM Book");
+    $stmtBook->execute();
+    $books = $stmtBook->fetchAll(PDO::FETCH_ASSOC);
 
-    $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch Order data
+    $stmtOrder = $conn->prepare("SELECT `Order`.OrderID, `Order`.UserName, `Order`.ISBN, `Order`.DatePurchase, `Order`.Quantity, `Order`.TotalPrice, `Order`.Status, Book.BookTitle
+        FROM `Order`
+        LEFT JOIN Book ON `Order`.ISBN = Book.ISBN");
+    $stmtOrder->execute();
+    $orders = $stmtOrder->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
@@ -104,6 +111,8 @@ try {
 <body>
     <h1>Admin Panel</h1>
     <button onclick="redirectToAddProduct()">Add Product</button>
+
+    <h2>Book Table</h2>
     <table>
         <tr>
             <th>ISBN</th>
@@ -128,6 +137,32 @@ try {
                         <button type="submit">Remove</button>
                     </form>
                 </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <h2>Order Table</h2>
+    <table>
+        <tr>
+            <th>Order ID</th>
+            <th>User Name</th>
+            <th>ISBN</th>
+            <th>Book Title</th>
+            <th>Date Purchase</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Status</th>
+        </tr>
+        <?php foreach ($orders as $order) : ?>
+            <tr>
+                <td><?php echo $order['OrderID']; ?></td>
+                <td><?php echo $order['UserName']; ?></td>
+                <td><?php echo $order['ISBN']; ?></td>
+                <td><?php echo $order['BookTitle']; ?></td>
+                <td><?php echo $order['DatePurchase']; ?></td>
+                <td><?php echo $order['Quantity']; ?></td>
+                <td><?php echo $order['TotalPrice']; ?></td>
+                <td><?php echo $order['Status']; ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
