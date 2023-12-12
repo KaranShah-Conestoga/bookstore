@@ -21,10 +21,11 @@ try {
     $stmtBook->execute();
     $books = $stmtBook->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Order data
-    $stmtOrder = $conn->prepare("SELECT `Order`.OrderID, `Order`.UserName, `Order`.ISBN, `Order`.DatePurchase, `Order`.Quantity, `Order`.TotalPrice, `Order`.Status, Book.BookTitle
+    // Fetch Order and Customer data
+    $stmtOrder = $conn->prepare("SELECT `Order`.OrderID, `Order`.UserName, `Order`.ISBN, `Order`.DatePurchase, `Order`.Quantity, `Order`.TotalPrice, `Order`.Status,
+        Customer.CustomerName, Customer.CustomerPhone, Customer.CustomerIC, Customer.CustomerEmail, Customer.CustomerAddress, Customer.CustomerGender
         FROM `Order`
-        LEFT JOIN Book ON `Order`.ISBN = Book.ISBN");
+        LEFT JOIN Customer ON `Order`.UserName = Customer.UserName");
     $stmtOrder->execute();
     $orders = $stmtOrder->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -112,7 +113,7 @@ try {
     <h1>Admin Panel</h1>
     <button onclick="redirectToAddProduct()">Add Product</button>
 
-    <h2>Book Table</h2>
+    <h2>Book Information Table</h2>
     <table>
         <tr>
             <th>ISBN</th>
@@ -141,28 +142,34 @@ try {
         <?php endforeach; ?>
     </table>
 
-    <h2>Order Table</h2>
+    <h2>Order and Customer Information Table</h2>
     <table>
         <tr>
             <th>Order ID</th>
-            <th>User Name</th>
             <th>ISBN</th>
-            <th>Book Title</th>
             <th>Date Purchase</th>
             <th>Quantity</th>
-            <th>Total Price</th>
             <th>Status</th>
+            <th>Customer Name</th>
+            <th>Customer Phone</th>
+            <th>Customer Email</th>
+            <th>Customer Address</th>
+            <th>Total Price</th>
+            
         </tr>
         <?php foreach ($orders as $order) : ?>
             <tr>
                 <td><?php echo $order['OrderID']; ?></td>
-                <td><?php echo $order['UserName']; ?></td>
                 <td><?php echo $order['ISBN']; ?></td>
-                <td><?php echo $order['BookTitle']; ?></td>
                 <td><?php echo $order['DatePurchase']; ?></td>
                 <td><?php echo $order['Quantity']; ?></td>
-                <td><?php echo $order['TotalPrice']; ?></td>
                 <td><?php echo $order['Status']; ?></td>
+                <td><?php echo $order['CustomerName']; ?></td>
+                <td><?php echo $order['CustomerPhone']; ?></td>                
+                <td><?php echo $order['CustomerEmail']; ?></td>
+                <td><?php echo $order['CustomerAddress']; ?></td>
+                <td><?php echo $order['TotalPrice']; ?></td>
+                
             </tr>
         <?php endforeach; ?>
     </table>
