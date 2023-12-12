@@ -26,23 +26,25 @@ $sql = "USE bookstore";
 $conn->query($sql);
 
 $sql = "SELECT users.UserName, users.Password, customer.CustomerName, customer.CustomerIC, customer.CustomerEmail, customer.CustomerPhone, customer.CustomerGender, customer.CustomerAddress
-	FROM users, customer
-	WHERE users.UserID = customer.UserID AND users.UserID = " . $_SESSION['id'] . "";
-$result = $conn->query($sql);
-// echo "<pre>";print_r($result->fetch_assoc());
-// while ($row = $result->fetch_assoc()) {
-//     echo "<pre>";
-//     print_r($row);
-// }
+        FROM users, customer
+        WHERE users.UserName = customer.UserName AND users.UserName = '" . $_SESSION['id'] . "'";
 
-while ($row = $result->fetch_assoc()) {
-	$oUserName = $row['UserName'];
-	$oPassword = $row['Password'];
-	$oName = $row['CustomerName'];
-	$oIC = $row['CustomerIC'];
-	$oEmail = $row['CustomerEmail'];
-	$oPhone = $row['CustomerPhone'];
-	$oAddress = $row['CustomerAddress'];
+
+
+$result = $conn->query($sql);
+
+if ($result === false) {
+	echo "Error: " . $sql . "<br>" . $conn->error;
+} else {
+	while ($row = $result->fetch_assoc()) {
+		$oUserName = $row['UserName'];
+		$oPassword = $row['Password'];
+		$oName = $row['CustomerName'];
+		$oIC = $row['CustomerIC'];
+		$oEmail = $row['CustomerEmail'];
+		$oPhone = $row['CustomerPhone'];
+		$oAddress = $row['CustomerAddress'];
+	}
 }
 
 

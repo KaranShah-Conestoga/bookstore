@@ -20,7 +20,7 @@
 		$sql = "USE bookstore";
 		$conn->query($sql);
 
-		$bookID = $_POST['ac'];
+		$ISBN = $_POST['ac'];
 		$quantity = $_POST['quantity'];
 
 		// Check if quantity is greater than or equal to 1
@@ -28,31 +28,31 @@
 			echo "Quantity must be greater than or equal to 1.";
 			// You might want to redirect the user or handle the error appropriately
 		} else {
-			$sql = "SELECT * FROM book WHERE BookID = '" . $bookID . "'";
+			$sql = "SELECT * FROM book WHERE ISBN = '" . $ISBN . "'";
 			$result = $conn->query($sql);
 
 			while ($row = $result->fetch_assoc()) {
 				$price = $row['Price'];
 			}
-			$customerID = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+			$UserName = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 
 			$totalPrice = $price * $quantity;
 
-			if (!$customerID) {
+			if (!$UserName) {
 				// redirect to login page
 				header("Location: login.php");
 			} else {
 				// Check if the product is already in the cart
-				$checkQuery = "SELECT * FROM cart WHERE CustomerID = '$customerID' AND BookID = '$bookID'";
+				$checkQuery = "SELECT * FROM cart WHERE UserName = '$UserName' AND ISBN = '$ISBN'";
 				$checkResult = $conn->query($checkQuery);
 
 				if ($checkResult->num_rows > 0) {
 					// Product already in the cart, update the quantity and price
-					$updateQuantityPrice = "UPDATE cart SET Quantity = Quantity + $quantity, Price = '$price', TotalPrice = TotalPrice + $totalPrice WHERE CustomerID = '$customerID' AND BookID = '$bookID'";
+					$updateQuantityPrice = "UPDATE cart SET Quantity = Quantity + $quantity, Price = '$price', TotalPrice = TotalPrice + $totalPrice WHERE UserName = '$UserName' AND ISBN = '$ISBN'";
 					$conn->query($updateQuantityPrice);
 				} else {
 					// Product not in the cart, insert a new record
-					$insertQuery = "INSERT INTO cart (CustomerID, BookID, Price, Quantity, TotalPrice) VALUES ('$customerID', '$bookID', '$price', '$quantity', '$totalPrice')";
+					$insertQuery = "INSERT INTO cart (UserName, ISBN, Price, Quantity, TotalPrice) VALUES ('$UserName', '$ISBN', '$price', '$quantity', '$totalPrice')";
 					$conn->query($insertQuery);
 				}
 			}
@@ -94,10 +94,10 @@
 		$sql = "USE bookstore";
 		$conn->query($sql);
 
-		// Assuming 'BookID' is the unique identifier for items in the cart
+		// Assuming 'ISBN' is the unique identifier for items in the cart
 		if (isset($_POST['delete'])) {
 			$bookIDToDelete = $_POST['delete'];
-			$sql = "DELETE FROM cart WHERE BookID = '$bookIDToDelete'";
+			$sql = "DELETE FROM cart WHERE ISBN = '$bookIDToDelete'";
 			$conn->query($sql);
 		}
 	}
@@ -122,8 +122,8 @@
 	?>
 
 	<?php
-	$customerID = isset($_SESSION['id']) ? $_SESSION['id'] : null;
-	if ($customerID != null) {
+	$UserName = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+	if ($UserName != null) {
 		echo '<header>';
 		echo '<blockquote>';
 		echo '<a href="index.php"><img src="image/Asset 3-8.png"></a>';
@@ -133,7 +133,7 @@
 		echo '</header>';
 	}
 
-	if ($customerID == null) {
+	if ($UserName == null) {
 		echo '<header>';
 		echo '<blockquote>';
 		echo '<a href="index.php"><img src="image/logo.png"></a>';
@@ -152,7 +152,7 @@
 		echo '<tr><td>' . '<img src="' . $row["Image"] . '"width="80%">' . '</td></tr><tr><td style="padding: 5px;">Title: ' . $row["BookTitle"] . '</td></tr><tr><td style="padding: 5px;">ISBN: ' . $row["ISBN"] . '</td></tr><tr><td style="padding: 5px;">Author: ' . $row["Author"] . '</td></tr><tr><td style="padding: 5px;">Type: ' . $row["Type"] . '</td></tr><tr><td style="padding: 5px;">$' . $row["Price"] . '</td></tr><tr><td style="padding: 5px;">
 	   	<form action="" method="post">
 	   	Quantity: <input type="number" value="1" name="quantity" style="width: 20%"/><br>
-	   	<input type="hidden" value="' . $row['BookID'] . '" name="ac"/>
+	   	<input type="hidden" value="' . $row['ISBN'] . '" name="ac"/>
 	   	<input class="button" type="submit" value="Add to Cart"/>
 	   	</form></td></tr>';
 		echo "</table>";
@@ -161,11 +161,11 @@
 	echo "</tr>";
 	echo "</table>";
 
-	// $sql = "SELECT book.BookID, book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.BookID = cart.BookID AND cart.CustomerID = '" . $customerID . "'";
-	if ($customerID == null) {
-		$sql = "SELECT book.BookID, book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.BookID = cart.BookID";
+	// $sql = "SELECT book.ISBN, book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.ISBN = cart.ISBN AND cart.UserName = '" . $UserName . "'";
+	if ($UserName == null) {
+		$sql = "SELECT book.ISBN, book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.ISBN = cart.ISBN";
 	} else {
-		$sql = "SELECT book.BookID, book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.BookID = cart.BookID AND cart.CustomerID = '" . $customerID . "'";
+		$sql = "SELECT book.ISBN, book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.ISBN = cart.ISBN AND cart.UserName = '" . $UserName . "'";
 	}
 
 	$result = $conn->query($sql);
@@ -184,7 +184,7 @@
 
 		// Add delete button with a cross icon
 		echo '<form action="" method="post">';
-		echo '<input type="hidden" name="delete" value="' . $row['BookID'] . '">';
+		echo '<input type="hidden" name="delete" value="' . $row['ISBN'] . '">';
 		echo '<button type="submit" class="delete-button" title="Delete">&#10005;</button>';
 		echo '</form>';
 
