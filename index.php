@@ -192,7 +192,13 @@
 		$total += $row['TotalPrice'];
 	}
 	echo "<tr><td style='text-align: right;background-color: #f2f2f2;''>";
-	echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' value='CHECKOUT'></form></center>";
+	// echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
+	// input filed shoud be disabled if cart is empty
+	if ($total == 0) {
+		echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
+	} else {
+		echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' value='CHECKOUT'></form></center>";
+	}
 	echo "</td></tr>";
 	echo "</table>";
 	echo '</div>';
