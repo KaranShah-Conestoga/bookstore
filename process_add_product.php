@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
 
             if ($conn->query($sql) === TRUE) {
                 echo "Product added successfully.";
-                header("Location: add_product.php");
+                header("Location: admin_panel.php");
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
