@@ -146,11 +146,11 @@ try {
     <table>
         <tr>
             <th>Order ID</th>
+            <th>Customer Name</th>
             <th>ISBN</th>
             <th>Date Purchase</th>
             <th>Quantity</th>
             <th>Status</th>
-            <th>Customer Name</th>
             <th>Customer Phone</th>
             <th>Customer Email</th>
             <th>Customer Address</th>
@@ -160,11 +160,11 @@ try {
         <?php foreach ($orders as $order) : ?>
             <tr>
                 <td><?php echo $order['OrderID']; ?></td>
+                <td><?php echo $order['CustomerName']; ?></td>
                 <td><?php echo $order['ISBN']; ?></td>
                 <td><?php echo $order['DatePurchase']; ?></td>
                 <td><?php echo $order['Quantity']; ?></td>
                 <td><?php echo $order['Status']; ?></td>
-                <td><?php echo $order['CustomerName']; ?></td>
                 <td><?php echo $order['CustomerPhone']; ?></td>                
                 <td><?php echo $order['CustomerEmail']; ?></td>
                 <td><?php echo $order['CustomerAddress']; ?></td>
