@@ -89,11 +89,11 @@ table .btn:hover{
 }
 
 form{
-	margin-top: 2%;
+    margin-top: 2%;
 }
-input[type=text], input[type=password]{	
-	width: 100%;
-	padding: 12px;
+input[type=text], input[type=password]{ 
+    width: 100%;
+    padding: 12px;
     border-radius: 3px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -105,22 +105,22 @@ input[type=text]:focus, input[type=password]:focus {
     border: 2px solid rgb(20, 20, 20);
 }
 textarea {
-	outline: none;
-	border: 2px solid #ccc;
+    outline: none;
+    border: 2px solid #ccc;
 }
 textarea:focus {
-	border: 2px solid rgb(20, 20, 20);
+    border: 2px solid rgb(20, 20, 20);
 }
 
 .container {
-	width: 55%;
+    width: 55%;
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
     margin: 0 auto;
 }
 .container-footer {
-	width: 100%;
+    width: 100%;
     /* position: absolute;
     bottom: 0; */
     border-radius: 5px;
@@ -136,3 +136,29 @@ textarea:focus {
     margin: 0 auto;
     height: 70vh;   
 }
+
+/* footer */
+footer {
+    background-color: #000000;
+    margin-top: 8px;
+  }
+  
+  .container-footer {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    border-top: 1px solid #000000;
+    padding: 3px;
+  }
+  
+  .container-footer p {
+    color: #ffffff;
+  }
+  
+  /* Styling for the copyright section */
+  .container-footer .text-2xl {
+    font-size: 2xl;
+  }
+  

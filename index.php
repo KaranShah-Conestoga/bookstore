@@ -192,82 +192,21 @@
 		$total += $row['TotalPrice'];
 	}
 	echo "<tr><td style='text-align: right;background-color: #f2f2f2;''>";
-	// echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
-	// input filed shoud be disabled if cart is empty
-	if ($total == 0) {
-		echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
-	} else {
-		echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' value='CHECKOUT'></form></center>";
-	}
+	echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' value='CHECKOUT'></form></center>";
 	echo "</td></tr>";
 	echo "</table>";
 	echo '</div>';
 	echo '</blockquote>';
 	?>
-	  <footer style="background-color: #1d262d;" class="mt-8">
-        <div style="margin: 0 auto;" class="container-footer flex flex-col justify-center px-3 py-3 pt-6 text-[#657a89] lg:flex-row lg:space-x-1">
-            <div style="margin-bottom: 6px;" class="space-y-2px-4 mb-6 justify-center space-y-2 text-center lg:w-2/5 lg:text-left">
-                <h2 style="color: #fff;" class="text-center text-xl font-bold">About Lorem</h2>
-                <p class="text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum id necessitatibus consequatur
-                    praesentium molestias aliquam alias, aspernatur perferendis, possimus illo animi! Et sapiente
-                    voluptatum sit, molestiae corrupti quisquam perspiciatis! Omnis, mollitia in. <br /><br />
-                    If you have any suggestions for the site, or would like to make a request please contact us at:
-                    <a style="color: #3498db; text-decoration: underline;" href="mailto:support@mail.com">support@mail.com</a>
-                    we'll do our best to help.
-                </p>
-            </div>
-            <div style="margin: 0 auto;" class="mx-auto flex flex-col space-y-2 lg:w-2/5">
-                <div style="margin: 0 auto;" class="mx-auto flex flex-col space-y-2 md:pl-3">
-                    <h2 style="color: #fff;" class="flex justify-center text-xl font-bold">Quick Links</h2>
-                    <div class="flex gap-11 space-x-8 lg:mx-auto">
-                        <ul style="color: #3498db;" class="space-y-2 text-sm">
-                            <li class="hover:text-gray-300"><a href="#">Video</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Footage</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Motion graphics</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Video templates</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Privacy policy</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Terms and conditions</a></li>
-                            <li><a href="#">API</a></li>
-                        </ul>
-                        <ul style="color: #3498db;" class="space-y-2 text-sm">
-                            <li class="hover:text-gray-300"><a href="#">Browse</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Premium</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Affiliates</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Blog</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Licensing</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Contact</a></li>
-                            <li class="hover:text-gray-300"><a href="#">Cookies Setting</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div style="margin: 0 auto;" class="space-y-2">
-                <h2 style="color: #fff;" class="text-center text-xl font-bold">Social Media</h2>
-                <p class="text-center text-sm">For recent updates and news follow our social media feed</p>
-
-                <ul class="flex justify-center gap-4 text-sm">
-                    <li>
-                        <a href=""><img src="" alt="" />Youtube</a>
-                    </li>
-                    <li>
-                        <a href=""><img src="" alt="" />Facebook</a>
-                    </li>
-                    <li>
-                        <a href=""><img src="" alt="" />Instagram</a>
-                    </li>
-                    <li>
-                        <a href=""><img src="" alt="" />Twitter</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div style="margin: 0 auto;" class="container-footer flex flex-col text-center justify-center border-t py-5 lg:flex-row">
-            <h1 style="color: #657a89;" class="text-2xl">LOGO</h1>
-            <p style="color: #657a89;"> &copy; Copyright 2058, Example Corporation</p>
+	  <footer style="background-color:#000000;" class="mt-8">
+        <div style="margin: 0 auto; background-color: #000000" class="container-footer">
+            <h1 class="text-2xl"><a href="index.php"><img src="image/logo.png"></a></h1>
+            <p> &copy; Copyright 2023, Book Store</p>
         </div>
     </footer>
+</body>
+
+
 </body>
 
 </html>
