@@ -16,7 +16,7 @@ CREATE TABLE Book(
 CREATE TABLE Users(
     -- UserID int not null AUTO_INCREMENT,
     UserName varchar(128),
-    Password varchar(16),
+    Password varchar(70),
     PRIMARY KEY (UserName)
 );
 

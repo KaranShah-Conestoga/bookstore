@@ -122,7 +122,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 													$sql = "USE bookstore";
 													$conn->query($sql);
 
-													$sql = "UPDATE users SET UserName = '" . $uname . "', Password = '" . $upassword . "' WHERE UserID = "
+													$hashed_pass = password_hash($upassword,PASSWORD_BCRYPT);
+
+													$sql = "UPDATE users SET UserName = '" . $uname . "', Password = '" . $hashed_pass . "' WHERE UserID = "
 														. $_SESSION['id'] . "";
 													$conn->query($sql);
 

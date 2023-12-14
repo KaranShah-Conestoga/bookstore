@@ -65,6 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 												} else {
 													$address = $_POST['address'];
 
+
+
+													//Hashing Password to store in Database
+													$hashed_pass = password_hash($upassword,PASSWORD_BCRYPT);
+
 													$servername = "localhost";
 													$username = "root";
 													$password = "";
@@ -94,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 													} else {
 														// Proceed with the INSERT
 														$stmt = $conn->prepare("INSERT INTO users(UserName, Password) VALUES(?, ?)");
-														$stmt->bind_param("ss", $uname, $upassword);
+														$stmt->bind_param("ss", $uname, $hashed_pass);
 														$stmt->execute();
 
 														$sql = "INSERT INTO customer(CustomerName, CustomerPhone, CustomerIC, CustomerEmail, CustomerAddress, CustomerGender, UserName) 
