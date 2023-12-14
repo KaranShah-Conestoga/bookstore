@@ -8,7 +8,6 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-
     // Fetch Order and Customer data
     $stmtOrder = $conn->prepare("SELECT `Order`.OrderID, `Order`.UserName, `Order`.ISBN, `Order`.DatePurchase, `Order`.Quantity, `Order`.TotalPrice, `Order`.Status,
         Customer.CustomerName, Customer.CustomerPhone, Customer.CustomerIC, Customer.CustomerEmail, Customer.CustomerAddress, Customer.CustomerGender
@@ -20,6 +19,16 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['complete_order'])) {
+    $orderId = $_POST['complete_order'];
+    try {
+        $updateStatus = $conn->prepare("UPDATE `Order` SET `Status` = 'completed' WHERE OrderID = :orderId");
+        $updateStatus->bindParam(':orderId', $orderId);
+        $updateStatus->execute();
+    } catch (PDOException $e) {
+        echo "Error updating status: " . $e->getMessage();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +37,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Orders</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,8 +54,7 @@ try {
             background-color: #4285f4;
             padding: 2rem;
             color: white;
-            width:100%
-
+            width: 100%
         }
 
         button {
@@ -75,7 +83,8 @@ try {
             overflow: hidden;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
@@ -99,7 +108,9 @@ try {
 
 <body>
     <h1>Orders</h1>
-    
+    <div>
+        <button onclick="redirectToDashboard()">Dashboard</button>
+    </div>
 
     <h2>Order and Customer Information Table</h2>
     <table>
@@ -109,12 +120,12 @@ try {
             <th>ISBN</th>
             <th>Date Purchase</th>
             <th>Quantity</th>
-            <th>Status</th>
             <th>Customer Phone</th>
             <th>Customer Email</th>
             <th>Customer Address</th>
             <th>Total Price</th>
-            
+            <th>Status</th>
+            <th>Action</th>
         </tr>
         <?php foreach ($orders as $order) : ?>
             <tr>
@@ -123,21 +134,28 @@ try {
                 <td><?php echo $order['ISBN']; ?></td>
                 <td><?php echo $order['DatePurchase']; ?></td>
                 <td><?php echo $order['Quantity']; ?></td>
-                <td><?php echo $order['Status']; ?></td>
-                <td><?php echo $order['CustomerPhone']; ?></td>                
+                <td><?php echo $order['CustomerPhone']; ?></td>
                 <td><?php echo $order['CustomerEmail']; ?></td>
                 <td><?php echo $order['CustomerAddress']; ?></td>
                 <td><?php echo $order['TotalPrice']; ?></td>
-                
+                <td><?php echo $order['Status']; ?></td>
+                <td>
+                    <?php if ($order['Status'] !== 'completed') : ?>
+                        <form method="post" action="">
+                            <input type="hidden" name="complete_order" value="<?php echo $order['OrderID']; ?>">
+                            <button type="submit">Complete</button>
+                        </form>
+                    <?php endif; ?>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
 
     <script>
-        function redirectToAddProduct() {
-            window.location.href = 'add_product.php';
+        function redirectToDashboard() {
+            window.location.href = "admin_panel.php";
         }
     </script>
 </body>
 
-</html>        
+</html>

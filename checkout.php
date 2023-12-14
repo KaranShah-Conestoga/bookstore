@@ -34,7 +34,7 @@
 		while ($row = $result->fetch_assoc()) {
 			$total += $row['TotalPrice'];
 			$sql = "INSERT INTO `order`(UserName, ISBN, DatePurchase, Quantity, TotalPrice, Status) 
-					VALUES('" . $_SESSION['id'] . "', '" . $row['ISBN'] . "', CURRENT_TIME, " . $row['Quantity'] . ", " . $row['TotalPrice'] . ", 'N')";
+					VALUES('" . $_SESSION['id'] . "', '" . $row['ISBN'] . "', CURRENT_TIME, " . $row['Quantity'] . ", " . $row['TotalPrice'] . ", 'Not Completed')";
 			$conn->query($sql);
 		}
 
