@@ -21,13 +21,6 @@ try {
     $stmtBook->execute();
     $books = $stmtBook->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch Order and Customer data
-    $stmtOrder = $conn->prepare("SELECT `Order`.OrderID, `Order`.UserName, `Order`.ISBN, `Order`.DatePurchase, `Order`.Quantity, `Order`.TotalPrice, `Order`.Status,
-        Customer.CustomerName, Customer.CustomerPhone, Customer.CustomerIC, Customer.CustomerEmail, Customer.CustomerAddress, Customer.CustomerGender
-        FROM `Order`
-        LEFT JOIN Customer ON `Order`.UserName = Customer.UserName");
-    $stmtOrder->execute();
-    $orders = $stmtOrder->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
@@ -42,6 +35,10 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f4;
@@ -71,6 +68,7 @@ try {
             border-radius: 5px;
             margin-top: 15px;
             transition: background-color 0.3s ease;
+            margin-bottom: 1rem;
         }
 
         button:hover {
@@ -106,12 +104,16 @@ try {
             max-width: 70px;
             max-height: 70px;
         }
+        
     </style>
 </head>
 
 <body>
-    <h1>Admin Panel</h1>
+
+    <h1>Products</h1>
+    <div>
     <button onclick="redirectToAddProduct()">Add Product</button>
+    </div>
 
     <h2>Book Information Table</h2>
     <table>
@@ -141,39 +143,6 @@ try {
             </tr>
         <?php endforeach; ?>
     </table>
-
-    <h2>Order and Customer Information Table</h2>
-    <table>
-        <tr>
-            <th>Order ID</th>
-            <th>Customer Name</th>
-            <th>ISBN</th>
-            <th>Date Purchase</th>
-            <th>Quantity</th>
-            <th>Status</th>
-            <th>Customer Phone</th>
-            <th>Customer Email</th>
-            <th>Customer Address</th>
-            <th>Total Price</th>
-            
-        </tr>
-        <?php foreach ($orders as $order) : ?>
-            <tr>
-                <td><?php echo $order['OrderID']; ?></td>
-                <td><?php echo $order['CustomerName']; ?></td>
-                <td><?php echo $order['ISBN']; ?></td>
-                <td><?php echo $order['DatePurchase']; ?></td>
-                <td><?php echo $order['Quantity']; ?></td>
-                <td><?php echo $order['Status']; ?></td>
-                <td><?php echo $order['CustomerPhone']; ?></td>                
-                <td><?php echo $order['CustomerEmail']; ?></td>
-                <td><?php echo $order['CustomerAddress']; ?></td>
-                <td><?php echo $order['TotalPrice']; ?></td>
-                
-            </tr>
-        <?php endforeach; ?>
-    </table>
-
     <script>
         function redirectToAddProduct() {
             window.location.href = 'add_product.php';
