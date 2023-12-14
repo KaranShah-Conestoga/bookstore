@@ -126,7 +126,7 @@
 	if ($UserName != null) {
 		echo '<header>';
 		echo '<blockquote>';
-		echo '<a href="index.php"><img src="image/Asset 3-8.png"></a>';
+		echo '<a href="index.php"><img src="image/logo.png"></a>';
 		echo '<form class="hf" action="logout.php"><input class="hi" type="submit" name="submitButton" value="Logout"></form>';
 		echo '<form class="hf" action="edituser.php"><input class="hi" type="submit" name="submitButton" value="Edit Profile"></form>';
 		echo '</blockquote>';
@@ -171,7 +171,7 @@
 	$result = $conn->query($sql);
 
 	echo "<table style='width:20%; float:right;'>";
-	echo "<th style='text-align:left;'><i class='fa fa-shopping-cart' style='font-size:24px'></i> Cart <form style='float:right;' action='' method='post'><input type='hidden' name='delc'/><input class='cbtn' type='submit' value='Empty Cart'></form></th>";
+	echo "<th style='text-align:left;'><i class='fa fa-shopping-cart' style='font-size:24px'></i> Cart <form style='float:right;' action='' method='post'><input class='cbtn' name='delc' type='submit' value='Empty Cart'></form></th>";
 	$total = 0;
 	while ($row = $result->fetch_assoc()) {
 		echo '<tr><td style="display: flex; justify-content: space-between;">';

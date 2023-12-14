@@ -10,7 +10,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     if ($username === 'admin' && $password === 'adminpass') {
         // Set a session variable to mark the user as an admin
         $_SESSION['admin'] = true;
-        header("Location: admin_panel2.php");
+        header("Location: admin_panel.php");
         exit();
     } else {
         // Handle authentication failure
