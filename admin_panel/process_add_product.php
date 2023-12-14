@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
     $type = $_POST['type'];
 
     // File upload handling
-    $targetDirectory = "image/";
+    $targetDirectory = "../image/";
     $targetFile = $targetDirectory . basename($_FILES["image"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));

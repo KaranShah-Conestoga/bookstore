@@ -42,7 +42,7 @@ CREATE TABLE `Order`(
     DatePurchase datetime,
     Quantity int,
     TotalPrice double(12,2),
-    Status varchar(1),
+    Status varchar(20),
     PRIMARY KEY (OrderID),
     CONSTRAINT FOREIGN KEY (ISBN) REFERENCES Book(ISBN) ,
     CONSTRAINT FOREIGN KEY (UserName) REFERENCES Customer(UserName) 

@@ -9,28 +9,10 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_isbn"])) {
-        // Fetch the image path before deleting the book
-        $stmtImagePath = $conn->prepare("SELECT Image FROM Book WHERE ISBN = :isbn");
-        $stmtImagePath->bindParam(':isbn', $_POST["remove_isbn"]);
-        $stmtImagePath->execute();
-        $imagePath = $stmtImagePath->fetchColumn();
-
-        // Delete the book
-        $stmtDelete = $conn->prepare("DELETE FROM Book WHERE ISBN = :isbn");
-        $stmtDelete->bindParam(':isbn', $_POST["remove_isbn"]);
-        $stmtDelete->execute();
-
-        // Delete the corresponding image file
-        if ($imagePath && file_exists($imagePath)) {
-            unlink($imagePath);
-        }
-    }
-
-    // Fetch Book data
-    $stmtBook = $conn->prepare("SELECT * FROM Book");
-    $stmtBook->execute();
-    $books = $stmtBook->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch Customer data
+    $stmtCustomer = $conn->prepare("SELECT * FROM Customer");
+    $stmtCustomer->execute();
+    $customers = $stmtCustomer->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
@@ -38,13 +20,14 @@ try {
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>Customers</title>
     <style>
         *{
             margin: 0;
@@ -120,50 +103,34 @@ try {
 </head>
 
 <body>
-
-    <h1>Products</h1>
+    <h1>Customers</h1>
     <div>
         <button onclick="redirectToDashboard()">Dashboard</button>
-    <button onclick="redirectToAddProduct()">Add Product</button>
     </div>
 
-    <h2>Book Information Table</h2>
+    <h2>Customer Information Table</h2>
     <table>
         <tr>
-            <th>ISBN</th>
-            <th>Book Title</th>
-            <th>Price</th>
-            <th>Author</th>
-            <th>Type</th>
-            <th>Image</th>
-            <th>Action</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Customer Email</th>
+            <th>Customer Contact</th>
+            <th>Customer Address</th>
         </tr>
-        <?php foreach ($books as $book) : ?>
+        <?php foreach ($customers as $customer) : ?>
             <tr>
-                <td><?php echo $book['ISBN']; ?></td>
-                <td><?php echo $book['BookTitle']; ?></td>
-                <td><?php echo $book['Price']; ?></td>
-                <td><?php echo $book['Author']; ?></td>
-                <td><?php echo $book['Type']; ?></td>
-                <td><img src="<?php echo $book['Image']; ?>" alt="Book Image"></td>
-                <td>
-                    <form method="post" onsubmit="return confirm('Are you sure you want to remove this book?');">
-                        <input type="hidden" name="remove_isbn" value="<?php echo $book['ISBN']; ?>">
-                        <button type="submit">Remove</button>
-                    </form>
-                </td>
+                <td><?php echo $customer['CustomerName']; ?></td>
+                <td><?php echo $customer['UserName']; ?></td>
+                <td><?php echo $customer['CustomerEmail']; ?></td>
+                <td><?php echo $customer['CustomerPhone']; ?></td>
+                <td><?php echo $customer['CustomerAddress']; ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
     <script>
-        function redirectToAddProduct() {
-            window.location.href = 'add_product.php';
-        }
-
         function redirectToDashboard() {
             window.location.href = "admin_panel.php";
         }
-
     </script>
 </body>
 
