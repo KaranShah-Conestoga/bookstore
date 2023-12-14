@@ -23,12 +23,6 @@
 
 		$sql = "USE bookstore";
 		$conn->query($sql);
-		// users.UserName = '" . $_SESSION['id'] . "'";
-		// $sql = "SELECT UserName from customer WHERE UserName = '" . $_SESSION['id'] . "'";
-		// $result = $conn->query($sql);
-		// while ($row = $result->fetch_assoc()) {
-		// 	$cID = $row['UserName'];
-		// }
 
 		$sql = "UPDATE cart SET UserName = '" . $_SESSION['id'] . "' WHERE 1";
 		$conn->query($sql);

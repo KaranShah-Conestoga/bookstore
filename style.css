@@ -164,3 +164,61 @@ footer {
     font-size: 2xl;
   }
   
+
+  /* Add this to your CSS file or in a <style> tag in your HTML */
+.cart-table {
+    width: 20%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.cart-table th, .cart-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.empty-cart-form {
+    float: right;
+  }
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+}
+
+.item-details {
+    display: flex;
+}
+
+.book-image {
+    width: 20%; /* Set to 20% of the parent container */
+    max-width: 80px; /* Maximum width for responsiveness */
+    margin-right: 20px;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.delete-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #ff4500;
+    cursor: pointer;
+}
+
+.empty-cart-message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.empty-cart-message img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.empty-cart-message p {
+    font-size: 18px;
+    color: #555;
+}

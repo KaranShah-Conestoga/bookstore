@@ -37,7 +37,7 @@
 			$UserName = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 
 			$totalPrice = $price * $quantity;
-			
+
 			if (!$UserName) {
 				// redirect to login page
 				header("Location: login.php");
@@ -122,6 +122,12 @@
 	?>
 
 	<?php
+
+	echo "<script>
+function redirectToCheckout() {
+	window.location.href = 'checkout.php';
+}
+</script>";
 	$UserName = isset($_SESSION['id']) ? $_SESSION['id'] : null;
 	if ($UserName != null) {
 		echo '<header>';
@@ -170,46 +176,81 @@
 
 	$result = $conn->query($sql);
 
-	echo "<table style='width:20%; float:right;'>";
-	echo "<th style='text-align:left;'><i class='fa fa-shopping-cart' style='font-size:24px'></i> Cart <form style='float:right;' action='' method='post'><input class='cbtn' name='delc' type='submit' value='Empty Cart'></form></th>";
+	
+	
+	echo "<table class='cart-table'>";
+	echo "<th><i class='fa fa-shopping-cart'></i> Cart <form class='empty-cart-form' action='' method='post'><input class='cbtn' name='delc' type='submit' value='Empty Cart'></form></th>";
+	
 	$total = 0;
-	while ($row = $result->fetch_assoc()) {
-		echo '<tr><td style="display: flex; justify-content: space-between;">';
-		echo '<div style="flex: 1;">';
-		echo '<img src="' . $row["Image"] . '" width="20%"><br>';
-		echo $row['BookTitle'] . "<br>$" . $row['Price'] . "<br>";
-		echo "Quantity: " . $row['Quantity'] . "<br>";
-		echo "Total Price: $" . $row['TotalPrice'] . "<br>";
+	if ($result->num_rows > 0) {
+	
+		while ($row = $result->fetch_assoc()) {
+			echo '<tr><td class="cart-item">';
+			echo '<div class="item-details">';
+			echo '<img src="' . $row["Image"] . '" alt="Book Image" class="book-image"><br>';
+			echo '<div class="item-info">';
+			echo '<span class="book-title">' . $row['BookTitle'] . '</span><br>';
+			echo '<span class="price">$' . $row['Price'] . '</span><br>';
+			echo '<span class="quantity">Quantity: ' . $row['Quantity'] . '</span><br>';
+			echo '<span class="total-price">Total Price: $' . $row['TotalPrice'] . '</span>';
+			echo '</div>'; // End item-info
+			echo '</div>'; // End item-details
+	
+			// Add delete button with a cross icon
+			echo '<form action="" method="post">';
+			echo '<input type="hidden" name="delete" value="' . $row['ISBN'] . '">';
+			echo '<button type="submit" class="delete-button" title="Delete">&#10005;</button>';
+			echo '</form>';
+	
+			echo "</td></tr>";
+			$total += $row['TotalPrice'];
+		}
+	
+		echo "</table>";
+	} else {
+		// Display empty cart image and message below the "Empty Cart" button
+		echo '<tr><td class="cart-item">';
+		echo '<div class="item-details">';
+		echo '<div class="empty-cart-message">';
+		echo '<img src="https://mir-s3-cdn-cf.behance.net/projects/404/95974e121862329.Y3JvcCw5MjIsNzIxLDAsMTM5.png" alt="Empty Cart Image">';
 		echo '</div>';
-
-		// Add delete button with a cross icon
-		echo '<form action="" method="post">';
-		echo '<input type="hidden" name="delete" value="' . $row['ISBN'] . '">';
-		echo '<button type="submit" class="delete-button" title="Delete">&#10005;</button>';
-		echo '</form>';
-
+		echo '</div>';
 		echo "</td></tr>";
-		$total += $row['TotalPrice'];
+		echo "</table>";
 	}
+	
+	
+	
+	
 	echo "<tr><td style='text-align: right;background-color: #f2f2f2;''>";
 	// echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
 	// input filed shoud be disabled if cart is empty
-	if ($total == 0) {
-		echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
+	// if ($total == 0) {
+	// 	echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' disabled value='CHECKOUT'></form></center>";
+	// } else {
+	// 	echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' value='CHECKOUT'></form></center>";
+	// }
+
+	if ($total > 0) {
+		echo "<center><form id='checkoutForm' action='checkout.php' method='post'>";
+		echo "<button class='button' type='button' onclick='redirectToCheckout()'>CHECKOUT</button>";
+		echo "</form></center>";
 	} else {
-		echo "Total: <b>$" . $total . "</b><center><form action='checkout.php' method='post'><input class='button' type='submit' name='checkout' value='CHECKOUT'></form></center>";
+		echo "<center><form id='checkoutForm' action='checkout.php' method='post'>";
+		echo "<button class='button' type='button' onclick='redirectToCheckout()' disabled>CHECKOUT</button>";
+		echo "</form></center>";
 	}
 	echo "</td></tr>";
 	echo "</table>";
 	echo '</div>';
 	echo '</blockquote>';
 	?>
-	  <footer style="background-color:#000000;" class="mt-8">
-        <div style="margin: 0 auto; background-color: #000000" class="container-footer">
-            <h1 class="text-2xl"><a href="index.php"><img src="image/logo.png"></a></h1>
-            <p> &copy; Copyright 2023, Book Store</p>
-        </div>
-    </footer>
+	<footer style="background-color:#000000;" class="mt-8">
+		<div style="margin: 0 auto; background-color: #000000" class="container-footer">
+			<h1 class="text-2xl"><a href="index.php"><img src="image/logo.png"></a></h1>
+			<p> &copy; Copyright 2023, Book Store</p>
+		</div>
+	</footer>
 </body>
 
 
